@@ -1,26 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
+
+import React, { useState } from 'react';
+import Robot from './components/Robot';
+import Table from './components/Table';
+import Navigator from './components/Navigator';
+
 import './App.css';
 
-function App() {
+const App: React.FC = () => {
+  const [robotPosition, setRobotPosition] = useState<{ x: number; y: number }>({ x: 1, y: 1 });
+
+  const handleMove = (direction: string) => {
+    let newPosition = { ...robotPosition };
+
+    switch (direction) {
+      case 'N':
+        newPosition.y = Math.max(1, robotPosition.y - 1);
+        break;
+      case 'E':
+        newPosition.x = Math.min(5, robotPosition.x + 1);
+        break;
+      case 'S':
+        newPosition.y = Math.min(5, robotPosition.y + 1);
+        break;
+      case 'W':
+        newPosition.x = Math.max(1, robotPosition.x - 1);
+        break;
+      default:
+        break;
+    }
+
+    setRobotPosition(newPosition);
+  };
+
+  const handleTeleport = (newPosition: { x: number; y: number }) => {
+    setRobotPosition(newPosition);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <Robot handleMove={handleMove} />
+      <Table robotPosition={robotPosition} handleTeleport={handleTeleport} />
+      <Navigator handleMove={handleMove} />
     </div>
   );
-}
+};
 
 export default App;
