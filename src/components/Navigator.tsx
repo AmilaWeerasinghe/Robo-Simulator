@@ -1,6 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { teleport, move } from '../store/actions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowUp, faArrowDown, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import '../styles/Navigator.css';
 
 interface NavigatorProps {
   robotPosition: { x: number; y: number };
@@ -10,7 +13,6 @@ interface NavigatorProps {
 
 const Navigator: React.FC<NavigatorProps> = ({ robotPosition, teleport, move }) => {
   const handleMove = (direction: { x: number; y: number }) => {
-   
     const nextX = robotPosition.x + direction.x;
     const nextY = robotPosition.y + direction.y;
 
@@ -20,12 +22,29 @@ const Navigator: React.FC<NavigatorProps> = ({ robotPosition, teleport, move }) 
   };
 
   return (
-    <div>
-      <div>Navigator Component</div>
-      <button onClick={() => handleMove({ x: 0, y: -1 })}>North</button>
-      <button onClick={() => handleMove({ x: 0, y: 1 })}>South</button>
-      <button onClick={() => handleMove({ x: 1, y: 0 })}>East</button>
-      <button onClick={() => handleMove({ x: -1, y: 0 })}>West</button>
+    <div className="navigator-container"data-testid="navigator-container">
+      <div className="navigator-box">
+        <div className="navigator-circle">
+          <div className="navigator-row">
+            <div onClick={() => handleMove({ x: 0, y: -1 })} className="navigator-button" data-testid="navigator-up">
+              <FontAwesomeIcon icon={faArrowUp} />
+            </div>
+          </div>
+          <div className="navigator-row">
+            <div onClick={() => handleMove({ x: -1, y: 0 })} className="navigator-button" data-testid="navigator-left">
+              <FontAwesomeIcon icon={faArrowLeft} />
+            </div>
+            <div onClick={() => handleMove({ x: 1, y: 0 })} className="navigator-button" data-testid="navigator-right">
+              <FontAwesomeIcon icon={faArrowRight} />
+            </div>
+          </div>
+          <div className="navigator-row">
+            <div onClick={() => handleMove({ x: 0, y: 1 })} className="navigator-button" data-testid="navigator-down">
+              <FontAwesomeIcon icon={faArrowDown} />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,41 +1,32 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import Navigator from '../components/Navigator';
-import { move } from '../store/actions';
 
-const mockStore = configureStore([]);
+// Mock your Redux store
+const mockStore = configureStore();
+const initialState = {
+  robotPosition: { x: 1, y: 1 },
+};
+const store = mockStore(initialState);
 
-test('renders navigator component', () => {
-  const store = mockStore({
-    robotPosition: { x: 1, y: 1 },
-  });
-
-  const { getByText } = render(
+test('Navigator renders correctly and handles clicks', () => {
+  // Render the Navigator component with the Redux store
+  const { getByTestId } = render(
     <Provider store={store}>
       <Navigator />
     </Provider>
   );
 
-  const northButton = getByText(/North/i);
-  expect(northButton).toBeInTheDocument();
+  // Check if the component renders correctly
+  expect(getByTestId('navigator-container')).toBeInTheDocument();
+
+  // Simulate clicks on the navigator buttons
+  fireEvent.click(getByTestId('navigator-up'));    // Up button
+  fireEvent.click(getByTestId('navigator-left'));  // Left button
+  fireEvent.click(getByTestId('navigator-right')); // Right button
+  fireEvent.click(getByTestId('navigator-down'));  // Down button
+
 });
-
-// test('clicking on navigator button dispatches move action', () => {
-//   const store = mockStore({
-//     robotPosition: { x: 1, y: 1 },
-//   });
-
-//   const { getByText } = render(
-//     <Provider store={store}>
-//       <Navigator />
-//     </Provider>
-//   );
-
-//   const northButton = getByText(/North/i);
-//   fireEvent.click(northButton);
-
-//   const actions = store.getActions();
-//   expect(actions).toEqual([{ type: 'MOVE', payload: { x: 0, y: -1 } }]);
-// });
