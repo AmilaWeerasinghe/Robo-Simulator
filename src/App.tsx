@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import Robot from './components/Robot';
 import Table from './components/Table';
 import Navigator from './components/Navigator';
 
@@ -38,7 +37,6 @@ const App: React.FC = () => {
 
   return (
     <div className="app">
-      <Robot handleMove={handleMove} />
       <Table robotPosition={robotPosition} handleTeleport={handleTeleport} />
       <Navigator handleMove={handleMove} />
     </div>
