@@ -1,4 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { teleport } from '../store/actions';
+
 import '../styles/Table.css';
 
 interface TableProps {
@@ -33,4 +36,12 @@ const Table: React.FC<TableProps> = ({ robotPosition, handleTeleport }) => {
   );
 };
 
-export default Table;
+const mapStateToProps = (state: any) => ({
+  robotPosition: state.robotPosition,
+});
+
+const mapDispatchToProps = {
+  handleTeleport: teleport,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Table);

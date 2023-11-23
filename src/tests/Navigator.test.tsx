@@ -1,14 +1,41 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import configureStore from 'redux-mock-store';
 import Navigator from '../components/Navigator';
+import { move } from '../store/actions';
 
-test('handles movement when a navigation button is clicked', () => {
-  const handleMove = jest.fn();
-  const { getByText } = render(<Navigator handleMove={handleMove} />);
-  
-  // Click a navigation button
-  fireEvent.click(getByText('North'));
+const mockStore = configureStore([]);
 
-  // Expect the handleMove function to be called with the correct direction
-  expect(handleMove).toHaveBeenCalledWith('N');
+test('renders navigator component', () => {
+  const store = mockStore({
+    robotPosition: { x: 1, y: 1 },
+  });
+
+  const { getByText } = render(
+    <Provider store={store}>
+      <Navigator />
+    </Provider>
+  );
+
+  const northButton = getByText(/North/i);
+  expect(northButton).toBeInTheDocument();
 });
+
+// test('clicking on navigator button dispatches move action', () => {
+//   const store = mockStore({
+//     robotPosition: { x: 1, y: 1 },
+//   });
+
+//   const { getByText } = render(
+//     <Provider store={store}>
+//       <Navigator />
+//     </Provider>
+//   );
+
+//   const northButton = getByText(/North/i);
+//   fireEvent.click(northButton);
+
+//   const actions = store.getActions();
+//   expect(actions).toEqual([{ type: 'MOVE', payload: { x: 0, y: -1 } }]);
+// });

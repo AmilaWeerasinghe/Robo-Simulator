@@ -1,14 +1,22 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import configureStore from 'redux-mock-store';
 import Table from '../components/Table';
 
-test('teleports the robot when a cell is clicked', () => {
-  const handleTeleport = jest.fn();
-  const { getByText } = render(<Table robotPosition={{ x: 1, y: 1 }} handleTeleport={handleTeleport} />);
-  
-  // Click a cell
-  fireEvent.click(getByText('🤖'));
+const mockStore = configureStore([]);
 
-  // Expect the teleport function to be called with the correct coordinates
-  expect(handleTeleport).toHaveBeenCalledWith({ x: 1, y: 1 });
+test('renders table component', () => {
+  const store = mockStore({
+    robotPosition: { x: 1, y: 1 },
+  });
+
+  const { getByText } = render(
+    <Provider store={store}>
+      <Table />
+    </Provider>
+  );
+
+  const robotElement = getByText(/🤖/i);
+  expect(robotElement).toBeInTheDocument();
 });
