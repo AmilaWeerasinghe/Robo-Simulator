@@ -1,31 +1,76 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import Navigator from '../components/Navigator';
 
 const mockStore = configureStore();
-const initialState = {
-  robotPosition: { x: 1, y: 1 },
-};
-const store = mockStore(initialState);
 
-test('Navigator renders correctly and handles clicks', () => {
- 
-  const { getByTestId } = render(
-    <Provider store={store}>
-      <Navigator />
-    </Provider>
-  );
+describe('Navigator Component', () => {
+  let store:any;
 
-  // Check if the component renders correctly
-  expect(getByTestId('navigator-container')).toBeInTheDocument();
+  beforeEach(() => {
+    store = mockStore({
+      robotPosition: { x: 3, y: 3 }, 
+    });
+  });
 
-  // Simulate clicks on the navigator buttons
-  fireEvent.click(getByTestId('navigator-up'));    // Up button
-  fireEvent.click(getByTestId('navigator-left'));  // Left button
-  fireEvent.click(getByTestId('navigator-right')); // Right button
-  fireEvent.click(getByTestId('navigator-down'));  // Down button
+  test('renders Navigator component', () => {
+    const { getByTestId } = render(
+      <Provider store={store}>
+        <Navigator />
+      </Provider>
+    );
 
+    const navigatorContainer = getByTestId('navigator-container');
+    expect(navigatorContainer).toBeInTheDocument();
+  });
+
+  test('dispatches MOVE action when clicking on "Up" button', () => {
+    const { getByTestId } = render(
+      <Provider store={store}>
+        <Navigator />
+      </Provider>
+    );
+
+    fireEvent.click(getByTestId('navigator-up'));
+    const actions = store.getActions();
+    expect(actions).toEqual([{ type: 'MOVE', payload: { x: 0, y: -1 } }]);
+  });
+
+  test('dispatches MOVE action when clicking on "Left" button', () => {
+    const { getByTestId } = render(
+      <Provider store={store}>
+        <Navigator />
+      </Provider>
+    );
+
+    fireEvent.click(getByTestId('navigator-left'));
+    const actions = store.getActions();
+    expect(actions).toEqual([{ type: 'MOVE', payload: { x: -1, y: 0 } }]);
+  });
+
+  test('dispatches MOVE action when clicking on "Right" button', () => {
+    const { getByTestId } = render(
+      <Provider store={store}>
+        <Navigator />
+      </Provider>
+    );
+
+    fireEvent.click(getByTestId('navigator-right'));
+    const actions = store.getActions();
+    expect(actions).toEqual([{ type: 'MOVE', payload: { x: 1, y: 0 } }]);
+  });
+
+  test('dispatches MOVE action when clicking on "Down" button', () => {
+    const { getByTestId } = render(
+      <Provider store={store}>
+        <Navigator />
+      </Provider>
+    );
+
+    fireEvent.click(getByTestId('navigator-down'));
+    const actions = store.getActions();
+    expect(actions).toEqual([{ type: 'MOVE', payload: { x: 0, y: 1 } }]);
+  });
 });
