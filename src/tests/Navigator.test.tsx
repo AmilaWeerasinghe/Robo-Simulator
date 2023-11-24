@@ -5,7 +5,6 @@ import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import Navigator from '../components/Navigator';
 
-// Mock your Redux store
 const mockStore = configureStore();
 const initialState = {
   robotPosition: { x: 1, y: 1 },
@@ -13,7 +12,7 @@ const initialState = {
 const store = mockStore(initialState);
 
 test('Navigator renders correctly and handles clicks', () => {
-  // Render the Navigator component with the Redux store
+ 
   const { getByTestId } = render(
     <Provider store={store}>
       <Navigator />
